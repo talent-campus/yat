@@ -1,35 +1,32 @@
-# ======================================================================#
-# This file is part of YAT (Yet Another Tetris).                       #
-#                                                                      #
-# YAT is free software: you can redistribute it and/or modify          #
-# it under the terms of the GNU General Public License as published by #
-# the Free Software Foundation, either version 3 of the License, or    #
-# (at your option) any later version.                                  #
-#                                                                      #
-# YAT is distributed in the hope that it will be useful,               #
-# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
-# GNU General Public License for more details.                         #
-#                                                                      #
-# You should have received a copy of the GNU General Public License    #
-# along with YAT.     If not, see <http://www.gnu.org/licenses/>.      #
-# ======================================================================#
+"""
+Yet Another Tetris. Main game file for the tetris like game "yat"
 
-# ==========================================================================#
-# Name       : yat.py (Yet Another Tetris)                                 #
-# Description: Main game file for the tetris like game "yat"               #
-# Author     : Adrian Antonana                                             #
-# Date       : 17.08.2012                                                  #
-# Copyright  : Adrian Antonana 2012                                        #
-# ==========================================================================#
+Created 17.08.2012 by Adrian Antonana
+Copyright (c) 2012 Adrian Antonana
+"""
+
+"""
+This file is part of YAT (Yet Another Tetris).
+
+YAT is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+YAT is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with YAT.     If not, see <http://www.gnu.org/licenses/>.
+"""
 import pygame as pg
 import table as tb
 import blocks as bk
 import colors as col
 
-# ==========================================================================#
-#                     Global Variables and Constants                       #
-# ==========================================================================#
+# Global Variables and Constants
 GAME_SPEED = 500
 SPEED_INC_TICK = 50
 LINES_INC_TICK = 10
@@ -38,17 +35,13 @@ REMOVED_LINES = 0
 MAX_LEVEL = 10
 FPS = 100
 
-# ==========================================================================#
-#                           Function Definitions                           #
-# ==========================================================================#
-
-# -------------------- Checks when blocks have to move down ----------------#
 def delay(ticks):
+    """Checks when blocks have to move down"""
     return (ticks % GAME_SPEED) >= GAME_SPEED - 10
 
 
-# ------------------ Increases the Game Level and Game Speed ---------------#
 def incSpeed(remlines):
+    """Increases the Game Level and Game Speed"""
     global GAME_SPEED
     global LEVEL
 
@@ -60,8 +53,8 @@ def incSpeed(remlines):
     return False
 
 
-# ---------------------- Updates the information surface -------------------#
 def updateInfo(nb):
+    """Updates the information surface"""
     global LEVEL_NUM_TEXT
     global LINES_NUM_TEXT
     global infosurface
@@ -76,9 +69,7 @@ def updateInfo(nb):
     nb.show(infosurface, NEXT_BLOCK_OFFSET, 20, INF_BLOCK_SIZE)
 
 
-# ==========================================================================#
-#              Initialize pygame (display,mixer and clock)                 #
-# ==========================================================================#
+# Initialize pygame (display,mixer and clock)
 pg.init()
 pg.mixer.init()
 sndblockplaced = pg.mixer.Sound("sounds/block_placed.wav")
@@ -90,9 +81,7 @@ clock = pg.time.Clock()
 pg.display.set_caption("yat - yet another tetris")
 pg.key.set_repeat(10, 50)
 
-# ==========================================================================#
-#                         Information surface                              #
-# ==========================================================================#
+# Information surface
 INFO_SURFACE_HEIGHT = 105
 FONT_SIZE = 30
 FONT_SIZE_GAME_OVER = 60
@@ -109,18 +98,14 @@ LINES_TEXT_OFFSET = (LEFT_OFFSET, INFO_SURFACE_HEIGHT - 40)
 LINES_NUM_TEXT_OFFSET = (70 + LEFT_OFFSET, INFO_SURFACE_HEIGHT - 40)
 NEXT_BLOCK_OFFSET = tb.BLOCK_SIZE * tb.WIDTH - INF_BLOCK_SIZE * 5
 
-# ==========================================================================#
-#                            Game over text                                #
-# ==========================================================================#
+# Game over text
 GAME_OVER_TEXT = font_game_over.render("GAME OVER", True, col.WHITE)
 GAME_OVER_TEXT_OFFSET = (
     (tb.BLOCK_SIZE * tb.WIDTH / 2) - 120,
     (tb.BLOCK_SIZE * tb.HEIGHT / 2) - 50,
 )
 
-# ==========================================================================#
-#                         Initialize surfaces                              #
-# ==========================================================================#
+# Initialize surfaces
 screen = pg.display.set_mode(
     (tb.BLOCK_SIZE * tb.WIDTH, tb.BLOCK_SIZE * tb.HEIGHT + INFO_SURFACE_HEIGHT)
 )
@@ -129,26 +114,18 @@ tablesurface = screen.subsurface(
 )
 infosurface = screen.subsurface((0, 0, tb.BLOCK_SIZE * tb.WIDTH, INFO_SURFACE_HEIGHT))
 
-# ==========================================================================#
-#                        Block spawn position                              #
-# ==========================================================================#
+# Block spawn position
 BLOCK_SPAWN_POS = (0, (tb.WIDTH / 2) - 1)
 
-# ==========================================================================#
-#               Create the table and an initial block                      #
-# ==========================================================================#
+# Create the table and an initial block
 t = tb.table(tablesurface)
 b = bk.block(BLOCK_SPAWN_POS)
 nextb = bk.block(BLOCK_SPAWN_POS)
 
-# ==========================================================================#
-#                 Draw initial information surface                         #
-# ==========================================================================#
+# Draw initial information surface
 updateInfo(nextb)
 
-# ==========================================================================#
-#                            Main loop                                     #
-# ==========================================================================#
+# Main loop
 running = True
 
 while running:
@@ -231,9 +208,7 @@ while running:
             ):
                 sndblockrotate.play()
 
-# ==========================================================================#
-#                           The game is over                               #
-# ==========================================================================#
+# The game is over
 tablesurface.fill(col.BLACK)
 t.setSurfAlpha(60)
 t.show()

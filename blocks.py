@@ -1,35 +1,31 @@
-# ======================================================================#
-# This file is part of YAT (Yet Another Tetris).                       #
-#                                                                      #
-# YAT is free software: you can redistribute it and/or modify          #
-# it under the terms of the GNU General Public License as published by #
-# the Free Software Foundation, either version 3 of the License, or    #
-# (at your option) any later version.                                  #
-#                                                                      #
-# YAT is distributed in the hope that it will be useful,               #
-# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
-# GNU General Public License for more details.                         #
-#                                                                      #
-# You should have received a copy of the GNU General Public License    #
-# along with YAT.     If not, see <http://www.gnu.org/licenses/>.      #
-# ======================================================================#
+"""
+The block class for use in the tetris-like game.
 
+Created 17.08.2012 by Adrian Antonana
+Copyright (c) 2012 Adrian Antonana
+"""
 
-# ===============================================================#
-# Name       : block.py                                         #
-# Description: The block class for use in the tetris-like game. #
-# Athor      : Adrian Antonana                                  #
-# Date       : 17.08.2012                                       #
-# Copyright  : Adrian Antonana 2012                             #
-# ===============================================================#
+"""
+This file is part of YAT (Yet Another Tetris).
+
+YAT is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+YAT is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with YAT.     If not, see <http://www.gnu.org/licenses/>.
+"""
 import random as rnd
 import colors as clr
 import pygame as pg
 
-# ===============================================================#
-#                     Block Type Constants                      #
-# ===============================================================#
+# Block Type Constants
 E = 0
 I = 1
 T = 2
@@ -39,13 +35,11 @@ O = 5
 L = 6
 J = 7
 
-# ===============================================================#
-#                    Block class definition                     #
-# ===============================================================#
 class block:
+    """Block class definition"""
 
-    # -------------------- Object constructor -------------------#
     def __init__(self, (x, y), blocktype=None):
+        """Object constructor"""
 
         # if no type is given as a parameter, the block is randomly
         # generated
@@ -81,16 +75,12 @@ class block:
             self.positions = [[False, True], [False, True], [True, True]]
             self.color = clr.ORANGE
 
-    # ===============================================================#
-    #                    Function definitions                       #
-    # ===============================================================#
-
-    # --------------------- get the block type ----------------------#
     def getType(self):
+        """get the block type"""
         return self.blocktype
 
-    # ------------------- rotate a block clockwise ------------------#
     def rotRight(self, maxx, maxy, opl):
+        """rotate a block clockwise"""
         l = self.positions
         x = self.posx
         y = self.posy
@@ -136,8 +126,8 @@ class block:
 
         return False
 
-    # ---------------- rotate a block counterclockwise --------------#
     def rotLeft(self, maxx, maxy, opl):
+        """rotate a block counterclockwise"""
         l = self.positions
         x = self.posx
         y = self.posy
@@ -183,20 +173,20 @@ class block:
 
         return False
 
-    # -------------------- move a block down ------------------------#
     def movDown(self):
+        """move a block down"""
         self.posx += 1
 
-    # -------------------- move a block left ------------------------#
     def movLeft(self):
+        """move a block left"""
         self.posy -= 1
 
-    # -------------------- move a block right -----------------------#
     def movRight(self):
+        """move a block right"""
         self.posy += 1
 
-    # ------------- check if a block can move down ------------------#
     def canMovDown(self, theight, topl):
+        """check if a block can move down"""
         lowest = (0, 0)
         bpl = self.getPosList()
         for pos in bpl:
@@ -207,8 +197,8 @@ class block:
         movdownposlist = [(pos[0] + 1, pos[1]) for pos in bpl]
         return notbottomedge and set(movdownposlist).intersection(set(topl)) == set([])
 
-    # ---------------- check if a bloc can move right ---------------#
     def canMovRight(self, twidth, topl):
+        """check if a bloc can move right"""
         rightest = (0, 0)
         bpl = self.getPosList()
         for pos in bpl:
@@ -219,8 +209,8 @@ class block:
         movrightposlist = [(pos[0], pos[1] + 1) for pos in bpl]
         return notrightedge and set(movrightposlist).intersection(set(topl)) == set([])
 
-    # ---------------- check if a block can move left ---------------#
     def canMovLeft(self, twidth, topl):
+        """check if a block can move left"""
         leftest = (0, twidth)
         bpl = self.getPosList()
         for pos in bpl:
@@ -231,12 +221,12 @@ class block:
         movleftposlist = [(pos[0], pos[1] - 1) for pos in bpl]
         return notleftedge and set(movleftposlist).intersection(set(topl)) == set([])
 
-    # ------------- get the block position (upper left)--------------#
     def getPos(self):
+        """get the block position (upper left)"""
         return (self.posx, self.posy)
 
-    # ------------- get the bloc ocupied positions list -------------#
     def getPosList(self):
+        """get the bloc ocupied positions list"""
         l = self.positions
         x = self.posx
         y = self.posy
@@ -247,8 +237,8 @@ class block:
             if l[row][col] == True
         ]
 
-    # ------------- show a block on the given surface ---------------#
     def show(self, surface, offx, offy, size):
+        """show a block on the given surface"""
         l = self.positions
         inner_block_size = size - 4
         clip_offset = size - (size - inner_block_size) / 2
