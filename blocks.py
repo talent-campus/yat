@@ -19,8 +19,8 @@ along with YAT.     If not, see <http://www.gnu.org/licenses/>.
 Copyright (c) 17.08.2012 by Adrian Antonana
 """
 import random as rnd
-import colors as clr
 import pygame as pg
+import colors as clr
 
 # Block Type Constants
 E = 0
@@ -224,7 +224,7 @@ class block:
         return (self.posx, self.posy)
 
     def getPosList(self):
-        """get the bloc ocupied positions list"""
+        """get the block occupied positions list"""
         l = self.positions
         x = self.posx
         y = self.posy

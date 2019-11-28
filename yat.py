@@ -91,8 +91,10 @@ font_game_over = pg.font.SysFont(pg.font.get_default_font(), FONT_SIZE_GAME_OVER
 LEVEL_TEXT = font.render("Level : ", True, col.WHITE)
 LINES_TEXT = font.render("Lines : ", True, col.WHITE)
 LEVEL_TEXT_OFFSET = (LEFT_OFFSET, UPPER_OFFSET)
+LEVEL_NUM_TEXT = ''
 LEVEL_NUM_TEXT_OFFSET = (70 + LEFT_OFFSET, UPPER_OFFSET)
 LINES_TEXT_OFFSET = (LEFT_OFFSET, INFO_SURFACE_HEIGHT - 40)
+LINES_NUM_TEXT = ''
 LINES_NUM_TEXT_OFFSET = (70 + LEFT_OFFSET, INFO_SURFACE_HEIGHT - 40)
 NEXT_BLOCK_OFFSET = tb.BLOCK_SIZE * tb.WIDTH - INF_BLOCK_SIZE * 5
 
@@ -202,8 +204,8 @@ while running:
         elif key == pg.K_LALT:
             t.adBlock(b.getPosList(), bk.E)
             if b.rotRight(
-                t.getHeight(), t.getWidth(), t.getOcupPosList(b.getPosList())
-            ):
+                    t.getHeight(), t.getWidth(), t.getOcupPosList(b.getPosList())
+                ):
                 sndblockrotate.play()
 
 # The game is over
@@ -214,11 +216,9 @@ tablesurface.blit(GAME_OVER_TEXT, GAME_OVER_TEXT_OFFSET)
 pg.display.flip()
 sndgameover.play()
 
-quit = False
-while not quit:
+while True:
     event = pg.event.wait()
-    if event.type == pg.QUIT:
-        quit = True
-    if event.type == pg.KEYDOWN:
-        if event.key == pg.K_ESCAPE:
-            quit = True
+    if event.type == pg.QUIT or (
+            event.type == pg.KEYDOWN and
+            event.key == pg.K_ESCAPE):
+        break

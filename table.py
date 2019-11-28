@@ -18,7 +18,17 @@ along with YAT.     If not, see <http://www.gnu.org/licenses/>.
 
 Copyright (c) 17.08.2012 by Adrian Antonana
 """
-from blocks import *
+import pygame as pg
+from blocks import (
+    E,
+    I,
+    T,
+    S,
+    Z,
+    O,
+    L,
+    J,
+)
 from colors import (
     RED,
     GREEN,
@@ -27,12 +37,8 @@ from colors import (
     CYAN,
     MAGENTA,
     ORANGE,
-    WHITE,
     BLACK,
-    GREY,
-    GREY_DARK,
 )
-import pygame as pg
 
 # Table size constants
 WIDTH = 12
@@ -98,15 +104,17 @@ class table:
         w = self.width
         if actblockposlist is None:
             return [
-                (x, y) for x in range(h) for y in range(w) if self.matrix[x][y] != E
-            ]
-        else:
-            return [
                 (x, y)
                 for x in range(h)
                 for y in range(w)
-                if self.matrix[x][y] != E and (x, y) not in actblockposlist
+                if self.matrix[x][y] != E
             ]
+        return [
+            (x, y)
+            for x in range(h)
+            for y in range(w)
+            if self.matrix[x][y] != E and (x, y) not in actblockposlist
+        ]
 
     def adBlock(self, block, blocktype):
         """add a block to the table matrix"""
@@ -168,5 +176,6 @@ class table:
         return string
 
     def setSurfAlpha(self, alpha):
+        """alpha value on block surface"""
         self.surface.set_alpha(alpha)
         self.blocksurf.set_alpha(alpha)
