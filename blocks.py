@@ -1,4 +1,4 @@
-#======================================================================#
+# ======================================================================#
 # This file is part of YAT (Yet Another Tetris).                       #
 #                                                                      #
 # YAT is free software: you can redistribute it and/or modify          #
@@ -13,23 +13,23 @@
 #                                                                      #
 # You should have received a copy of the GNU General Public License    #
 # along with YAT.     If not, see <http://www.gnu.org/licenses/>.      #
-#======================================================================#
+# ======================================================================#
 
 
-#===============================================================#
+# ===============================================================#
 # Name       : block.py                                         #
 # Description: The block class for use in the tetris-like game. #
 # Athor      : Adrian Antonana                                  #
 # Date       : 17.08.2012                                       #
 # Copyright  : Adrian Antonana 2012                             #
-#===============================================================#
+# ===============================================================#
 import random as rnd
 import colors as clr
 import pygame as pg
 
-#===============================================================#
+# ===============================================================#
 #                     Block Type Constants                      #
-#===============================================================#
+# ===============================================================#
 E = 0
 I = 1
 T = 2
@@ -39,203 +39,225 @@ O = 5
 L = 6
 J = 7
 
-#===============================================================#
+# ===============================================================#
 #                    Block class definition                     #
-#===============================================================#
+# ===============================================================#
 class block:
 
-	#-------------------- Object constructor -------------------#
-	def __init__(self,(x,y),blocktype=None):
- 
-		# if no type is given as a parameter, the block is randomly
-		# generated
-		if blocktype == None:
-			self.blocktype = rnd.randint(I,J)
-		else:
-			self.blocktype = blocktype
+    # -------------------- Object constructor -------------------#
+    def __init__(self, (x, y), blocktype=None):
 
-		# set the block position	
-		self.posx      = x
-		self.posy      = y
+        # if no type is given as a parameter, the block is randomly
+        # generated
+        if blocktype == None:
+            self.blocktype = rnd.randint(I, J)
+        else:
+            self.blocktype = blocktype
 
-		# set blocktype, color and the shape of the block
-		if self.blocktype == I:
-			self.positions = [[True],[True],[True],[True]]
-			self.color     = clr.RED
-		elif self.blocktype == T:
-			self.positions = [[True,True,True],[False,True,False]]
-			self.color     = clr.MAGENTA
-		elif self.blocktype == S:
-			self.positions = [[False,True,True],[True,True,False]]
-			self.color     = clr.YELLOW
-		elif self.blocktype == Z:
-			self.positions = [[True,True,False],[False,True,True]]
-			self.color     = clr.BLUE
-		elif self.blocktype == O:
-			self.positions = [[True,True],[True,True]]
-			self.color     = clr.GREEN
-		elif self.blocktype == L:
-			self.positions = [[True,False],[True,False],[True,True]]
-			self.color     = clr.CYAN
-		elif self.blocktype == J:
-			self.positions = [[False,True],[False,True],[True,True]]
-			self.color     = clr.ORANGE
+        # set the block position
+        self.posx = x
+        self.posy = y
 
-#===============================================================#
-#                    Function definitions                       #
-#===============================================================#
+        # set blocktype, color and the shape of the block
+        if self.blocktype == I:
+            self.positions = [[True], [True], [True], [True]]
+            self.color = clr.RED
+        elif self.blocktype == T:
+            self.positions = [[True, True, True], [False, True, False]]
+            self.color = clr.MAGENTA
+        elif self.blocktype == S:
+            self.positions = [[False, True, True], [True, True, False]]
+            self.color = clr.YELLOW
+        elif self.blocktype == Z:
+            self.positions = [[True, True, False], [False, True, True]]
+            self.color = clr.BLUE
+        elif self.blocktype == O:
+            self.positions = [[True, True], [True, True]]
+            self.color = clr.GREEN
+        elif self.blocktype == L:
+            self.positions = [[True, False], [True, False], [True, True]]
+            self.color = clr.CYAN
+        elif self.blocktype == J:
+            self.positions = [[False, True], [False, True], [True, True]]
+            self.color = clr.ORANGE
 
-#--------------------- get the block type ----------------------#
-	def getType(self):
-		return self.blocktype
+    # ===============================================================#
+    #                    Function definitions                       #
+    # ===============================================================#
 
-#------------------- rotate a block clockwise ------------------#
-	def rotRight(self,maxx,maxy,opl):
-		l = self.positions
-		x = self.posx
-		y = self.posy
-		btype = self.blocktype
+    # --------------------- get the block type ----------------------#
+    def getType(self):
+        return self.blocktype
 
-		if len(self.positions) < len(self.positions[0]):
-			x -= 1
-			if btype == I:
-				y += 1
-		elif len(self.positions) > len(self.positions[0]):
-			x += 1
-			if btype == I and y >= 1:
-				y -= 1
+    # ------------------- rotate a block clockwise ------------------#
+    def rotRight(self, maxx, maxy, opl):
+        l = self.positions
+        x = self.posx
+        y = self.posy
+        btype = self.blocktype
 
-		newpos = [[l[row][col] for row in reversed(range(len(l)))] for col in range(len(l[0]))]
+        if len(self.positions) < len(self.positions[0]):
+            x -= 1
+            if btype == I:
+                y += 1
+        elif len(self.positions) > len(self.positions[0]):
+            x += 1
+            if btype == I and y >= 1:
+                y -= 1
 
-		exceedx = False
-		exceedy = False
+        newpos = [
+            [l[row][col] for row in reversed(range(len(l)))] for col in range(len(l[0]))
+        ]
 
-		if len(newpos)+x > maxx or x < 0:
-				exceedx = True		
+        exceedx = False
+        exceedy = False
 
-		if len(newpos[0])+y > maxy:
-				exceedy = True
-				deltay = len(newpos[0])+y-maxy
+        if len(newpos) + x > maxx or x < 0:
+            exceedx = True
 
-		if not exceedx:
-			if exceedy:
-				y -= deltay
-			newposlist = [(row+x,col+y) for row in range(len(newpos)) for col in range(len(newpos[0])) if newpos[row][col] == True]
-			if set(newposlist).intersection(set(opl)) == set([]):
-				self.positions = newpos
-				self.posx = x
-				self.posy = y
-				return True
+        if len(newpos[0]) + y > maxy:
+            exceedy = True
+            deltay = len(newpos[0]) + y - maxy
 
-		return False
+        if not exceedx:
+            if exceedy:
+                y -= deltay
+            newposlist = [
+                (row + x, col + y)
+                for row in range(len(newpos))
+                for col in range(len(newpos[0]))
+                if newpos[row][col] == True
+            ]
+            if set(newposlist).intersection(set(opl)) == set([]):
+                self.positions = newpos
+                self.posx = x
+                self.posy = y
+                return True
 
-#---------------- rotate a block counterclockwise --------------#
-	def rotLeft(self,maxx,maxy,opl):
-		l = self.positions
-		x = self.posx
-		y = self.posy
-		btype = self.blocktype
+        return False
 
-		if len(self.positions) < len(self.positions[0]):
-			x -= 1
-			if btype == I:
-				y += 1
-		elif len(self.positions) > len(self.positions[0]):
-			x += 1
-			if btype == I and y >= 1:
-				y -= 1
+    # ---------------- rotate a block counterclockwise --------------#
+    def rotLeft(self, maxx, maxy, opl):
+        l = self.positions
+        x = self.posx
+        y = self.posy
+        btype = self.blocktype
 
-		newpos = [[l[row][col] for row in range(len(l))] for col in reversed(range(len(l[0])))]
+        if len(self.positions) < len(self.positions[0]):
+            x -= 1
+            if btype == I:
+                y += 1
+        elif len(self.positions) > len(self.positions[0]):
+            x += 1
+            if btype == I and y >= 1:
+                y -= 1
 
-		exceedx = False
-		exceedy = False
+        newpos = [
+            [l[row][col] for row in range(len(l))] for col in reversed(range(len(l[0])))
+        ]
 
-		if len(newpos)+x > maxx or x < 0:
-				exceedx = True
+        exceedx = False
+        exceedy = False
 
-		if len(newpos[0])+y > maxy:
-				exceedy = True
-				deltay = len(newpos[0])+y-maxy
+        if len(newpos) + x > maxx or x < 0:
+            exceedx = True
 
-		if not exceedx:
-			if exceedy:
-				y -= deltay
-			newposlist = [(row+x,col+y) for row in range(len(newpos)) for col in range(len(newpos[0])) if newpos[row][col] == True]
-			if set(newposlist).intersection(set(opl)) == set([]):
-				self.positions = newpos
-				self.posx = x
-				self.posy = y
-				return True
+        if len(newpos[0]) + y > maxy:
+            exceedy = True
+            deltay = len(newpos[0]) + y - maxy
 
-		return False
+        if not exceedx:
+            if exceedy:
+                y -= deltay
+            newposlist = [
+                (row + x, col + y)
+                for row in range(len(newpos))
+                for col in range(len(newpos[0]))
+                if newpos[row][col] == True
+            ]
+            if set(newposlist).intersection(set(opl)) == set([]):
+                self.positions = newpos
+                self.posx = x
+                self.posy = y
+                return True
 
-#-------------------- move a block down ------------------------#
-	def movDown(self):
-		self.posx += 1
+        return False
 
-#-------------------- move a block left ------------------------#
-	def movLeft(self):
-		self.posy -= 1
+    # -------------------- move a block down ------------------------#
+    def movDown(self):
+        self.posx += 1
 
-#-------------------- move a block right -----------------------#
-	def movRight(self):
-		self.posy += 1
+    # -------------------- move a block left ------------------------#
+    def movLeft(self):
+        self.posy -= 1
 
-#------------- check if a block can move down ------------------#
-	def canMovDown(self,theight,topl):
-		lowest = (0,0)
-		bpl = self.getPosList()
-		for pos in bpl:
-			if lowest[0] < pos[0]: lowest = pos
+    # -------------------- move a block right -----------------------#
+    def movRight(self):
+        self.posy += 1
 
-		notbottomedge = lowest[0] < theight - 1
-		movdownposlist = [(pos[0]+1,pos[1]) for pos in bpl]
-		return notbottomedge and set(movdownposlist).intersection(set(topl)) == set([])
+    # ------------- check if a block can move down ------------------#
+    def canMovDown(self, theight, topl):
+        lowest = (0, 0)
+        bpl = self.getPosList()
+        for pos in bpl:
+            if lowest[0] < pos[0]:
+                lowest = pos
 
-#---------------- check if a bloc can move right ---------------#
-	def canMovRight(self,twidth,topl):
-		rightest = (0,0)
-		bpl      = self.getPosList()
-		for pos in bpl:
-			if rightest[1] < pos[1]: rightest = pos
+        notbottomedge = lowest[0] < theight - 1
+        movdownposlist = [(pos[0] + 1, pos[1]) for pos in bpl]
+        return notbottomedge and set(movdownposlist).intersection(set(topl)) == set([])
 
-		notrightedge = rightest[1] < twidth - 1
-		movrightposlist = [(pos[0],pos[1]+1) for pos in bpl]
-		return notrightedge and set(movrightposlist).intersection(set(topl)) == set([])
+    # ---------------- check if a bloc can move right ---------------#
+    def canMovRight(self, twidth, topl):
+        rightest = (0, 0)
+        bpl = self.getPosList()
+        for pos in bpl:
+            if rightest[1] < pos[1]:
+                rightest = pos
 
-#---------------- check if a block can move left ---------------#
-	def canMovLeft(self,twidth,topl):
-		leftest = (0,twidth)
-		bpl     = self.getPosList()
-		for pos in bpl:
-			if leftest[1] > pos[1]: leftest = pos
+        notrightedge = rightest[1] < twidth - 1
+        movrightposlist = [(pos[0], pos[1] + 1) for pos in bpl]
+        return notrightedge and set(movrightposlist).intersection(set(topl)) == set([])
 
-		notleftedge = leftest[1] > 0
-		movleftposlist = [(pos[0],pos[1]-1) for pos in bpl]
-		return notleftedge and set(movleftposlist).intersection(set(topl)) == set([])
-				
-#------------- get the block position (upper left)--------------#
-	def getPos(self):
-		return (self.posx,self.posy)
+    # ---------------- check if a block can move left ---------------#
+    def canMovLeft(self, twidth, topl):
+        leftest = (0, twidth)
+        bpl = self.getPosList()
+        for pos in bpl:
+            if leftest[1] > pos[1]:
+                leftest = pos
 
-#------------- get the bloc ocupied positions list -------------#
-	def getPosList(self):
-		l = self.positions
-		x = self.posx
-		y = self.posy
-		return [(row+x,col+y) for row in range(len(l)) for col in range(len(l[0])) if l[row][col] == True]
+        notleftedge = leftest[1] > 0
+        movleftposlist = [(pos[0], pos[1] - 1) for pos in bpl]
+        return notleftedge and set(movleftposlist).intersection(set(topl)) == set([])
 
-#------------- show a block on the given surface ---------------#
-	def show(self,surface,offx,offy,size):
-		l           = self.positions
-		inner_block_size = size - 4
-		clip_offset = size - (size - inner_block_size) / 2
-		block = pg.Surface((size,size))
-		block.set_alpha(255)
-		block.set_clip(2,2,inner_block_size,inner_block_size)
-		block.fill(self.color)
+    # ------------- get the block position (upper left)--------------#
+    def getPos(self):
+        return (self.posx, self.posy)
 
-		for row in range(len(l)):
-			for col in range(len(l[0])):
-				if l[row][col]:
-					surface.blit(block,((offx+(col*size),offy+(row*size))))
+    # ------------- get the bloc ocupied positions list -------------#
+    def getPosList(self):
+        l = self.positions
+        x = self.posx
+        y = self.posy
+        return [
+            (row + x, col + y)
+            for row in range(len(l))
+            for col in range(len(l[0]))
+            if l[row][col] == True
+        ]
+
+    # ------------- show a block on the given surface ---------------#
+    def show(self, surface, offx, offy, size):
+        l = self.positions
+        inner_block_size = size - 4
+        clip_offset = size - (size - inner_block_size) / 2
+        block = pg.Surface((size, size))
+        block.set_alpha(255)
+        block.set_clip(2, 2, inner_block_size, inner_block_size)
+        block.fill(self.color)
+
+        for row in range(len(l)):
+            for col in range(len(l[0])):
+                if l[row][col]:
+                    surface.blit(block, ((offx + (col * size), offy + (row * size))))
