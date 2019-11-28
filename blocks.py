@@ -1,11 +1,6 @@
 """
 The block class for use in the tetris-like game.
 
-Created 17.08.2012 by Adrian Antonana
-Copyright (c) 2012 Adrian Antonana
-"""
-
-"""
 This file is part of YAT (Yet Another Tetris).
 
 YAT is free software: you can redistribute it and/or modify
@@ -20,6 +15,8 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with YAT.     If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (c) 17.08.2012 by Adrian Antonana
 """
 import random as rnd
 import colors as clr
@@ -35,6 +32,7 @@ O = 5
 L = 6
 J = 7
 
+
 class block:
     """Block class definition"""
 
@@ -43,7 +41,7 @@ class block:
 
         # if no type is given as a parameter, the block is randomly
         # generated
-        if blocktype == None:
+        if blocktype is None:
             self.blocktype = rnd.randint(I, J)
         else:
             self.blocktype = blocktype
@@ -116,7 +114,7 @@ class block:
                 (row + x, col + y)
                 for row in range(len(newpos))
                 for col in range(len(newpos[0]))
-                if newpos[row][col] == True
+                if newpos[row][col] is True
             ]
             if set(newposlist).intersection(set(opl)) == set([]):
                 self.positions = newpos
@@ -163,7 +161,7 @@ class block:
                 (row + x, col + y)
                 for row in range(len(newpos))
                 for col in range(len(newpos[0]))
-                if newpos[row][col] == True
+                if newpos[row][col] is True
             ]
             if set(newposlist).intersection(set(opl)) == set([]):
                 self.positions = newpos
@@ -234,7 +232,7 @@ class block:
             (row + x, col + y)
             for row in range(len(l))
             for col in range(len(l[0]))
-            if l[row][col] == True
+            if l[row][col] is True
         ]
 
     def show(self, surface, offx, offy, size):

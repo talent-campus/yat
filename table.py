@@ -1,11 +1,6 @@
 """
 The table class for use in the tetris-like game "yat"
 
-Created 17.08.2012 by Adrian Antonana
-Copyright (c) 2012 Adrian Antonana
-"""
-
-"""
 This file is part of YAT (Yet Another Tetris).
 
 YAT is free software: you can redistribute it and/or modify
@@ -20,9 +15,23 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with YAT.     If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (c) 17.08.2012 by Adrian Antonana
 """
 from blocks import *
-from colors import *
+from colors import (
+    RED,
+    GREEN,
+    BLUE,
+    YELLOW,
+    CYAN,
+    MAGENTA,
+    ORANGE,
+    WHITE,
+    BLACK,
+    GREY,
+    GREY_DARK,
+)
 import pygame as pg
 
 # Table size constants
@@ -32,12 +41,12 @@ BLOCK_SIZE = 30
 BLOCK_SIZE_SMALL = BLOCK_SIZE - 5
 INNER_BLOCK_OFFSET = (BLOCK_SIZE - BLOCK_SIZE_SMALL) / 2
 
+
 class table:
     """Table Class definition"""
 
-    """object constructor"""
     def __init__(self, surface):
-
+        """object constructor"""
         self.surface = surface
         self.width = WIDTH
         self.height = HEIGHT
@@ -87,7 +96,7 @@ class table:
         """get a list with the table ocpied positions"""
         h = self.height
         w = self.width
-        if actblockposlist == None:
+        if actblockposlist is None:
             return [
                 (x, y) for x in range(h) for y in range(w) if self.matrix[x][y] != E
             ]

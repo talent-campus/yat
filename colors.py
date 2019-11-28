@@ -1,11 +1,6 @@
 """
 Color definitions file for the tetris like game "yat"
 
-Created 17.08.2012 by Adrian Antonana
-Copyright (c) 2012 Adrian Antonana
-"""
-
-"""
 This file is part of YAT (Yet Another Tetris).
 
 YAT is free software: you can redistribute it and/or modify
@@ -20,8 +15,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with YAT.     If not, see <http://www.gnu.org/licenses/>.
-"""
 
+Copyright (c) 17.08.2012 by Adrian Antonana
+"""
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
